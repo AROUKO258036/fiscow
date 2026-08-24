@@ -1,0 +1,1 @@
+(function(){try{var saved=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',saved==='dark'?'dark':'light')}catch(_){document.documentElement.setAttribute('data-theme','light')}})();

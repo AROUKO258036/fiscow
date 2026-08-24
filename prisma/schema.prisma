@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  emailVerifiedAt DateTime?
+  role      String    @default("USER")
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  companies Company[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Company {
+  id          Int    @id @default(autoincrement())
+  userId      Int
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  raisonSociale String
+  nif         String @unique
+  rccm        String?
+  secteur     String
+  dateCreation DateTime?
+  effectif    Int    @default(1)
+  chiffreAffaires Decimal?
+  regimeTva   String @default("simplifié")
+  typeEntite  String @default("individuelle")
+  hasProperty Boolean @default(false)
+  hasEmployees Boolean @default(false)
+  telephone   String?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  calendarEvents CalendarEvent[]
+  declarations Declaration[]
+  transactions Transaction[]
+  employees   Employee[]
+
+  @@map("companies")
+}
+
+model CalendarEvent {
+  id           Int     @id @default(autoincrement())
+  companyId    Int
+  company      Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title        String
+  type         String 
+  eventDate    DateTime
+  description  String?
+  reference    String?
+  montantEstime Decimal?
+  status       String  @default("pending")
+  completedAt  DateTime?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
+
+  @@map("calendar_events")
+}
+
+model Declaration {
+  id            Int     @id @default(autoincrement())
+  companyId     Int
+  company       Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  transactions  Transaction[]
+  type          String 
+  periode       String 
+  amountDue     Decimal @default(0)
+  amountPaid    Decimal @default(0)
+  status        String  @default("draft")
+  dueDate       DateTime
+  filedDate     DateTime?
+  paidDate      DateTime?
+  notes         String?
+  calendarEventId Int?
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+
+  @@index([calendarEventId])
+  @@map("declarations")
+}
+
+model Transaction {
+  id             Int     @id @default(autoincrement())
+  companyId      Int
+  company        Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  declarationId  Int?
+  declaration    Declaration? @relation(fields: [declarationId], references: [id], onDelete: SetNull)
+  type           String  @default("payment")
+  category       String 
+  amount         Decimal
+  reference      String?
+  paymentMethod  String?
+  status         String  @default("completed")
+  transactionDate DateTime
+  createdAt      DateTime? @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  @@index([declarationId])
+  @@map("transactions")
+}
+
+model TaxRate {
+  id              Int     @id @default(autoincrement())
+  key             String  @unique
+  name            String
+  type            String 
+  metadata        Json
+  applicableYears Json
+  description     String?
+  reference       String?
+  isActive        Boolean @default(true)
+  createdAt       DateTime? @default(now())
+  updatedAt       DateTime? @updatedAt
+
+  @@map("tax_rates")
+}
+
+model JobTitle {
+  id          Int     @id @default(autoincrement())
+  secteur     String 
+  libelle     String
+  transversal Boolean @default(false)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  @@map("job_titles")
+}
+
+model VerificationToken {
+  id      Int      @id @default(autoincrement())
+  email   String
+  token   String   @unique
+  expires DateTime
+  createdAt DateTime? @default(now())
+
+  @@index([email])
+  @@map("verification_tokens")
+}
+
+model PasswordResetToken {
+  id      Int      @id @default(autoincrement())
+  email   String
+  token   String   @unique
+  expires DateTime
+  createdAt DateTime? @default(now())
+
+  @@index([email])
+  @@map("password_reset_tokens")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  link      String?
+  key       String?
+  read      Boolean  @default(false)
+  createdAt DateTime? @default(now())
+
+  @@unique([userId, key])
+  @@index([userId, read])
+  @@map("notifications")
+}
+
+model Employee {
+  id            Int     @id @default(autoincrement())
+  companyId     Int
+  company       Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  nom           String?
+  poste         String
+  salaireBrutMensuel BigInt @default(0)
+  isActive      Boolean @default(true)
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+
+  @@map("employees")
+}

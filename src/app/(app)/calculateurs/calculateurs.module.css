@@ -1,0 +1,316 @@
+.page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 24px 52px;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: #ff8a1f;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.heading h1 {
+  margin: 0;
+  color: #171717;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -.035em;
+}
+
+.heading p {
+  max-width: 680px;
+  margin: 7px 0 0;
+  color: #756d66;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.companyPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid #ede7e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #625b55;
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.infoBanner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid #ffd7b5;
+  border-radius: 15px;
+  background: linear-gradient(135deg,#fff8f2 0%,#fff3e6 100%);
+}
+
+.infoIcon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #fff;
+  color: #ff8a1f;
+  font-size: 17px;
+}
+
+.infoBanner strong {
+  display: block;
+  color: #382f29;
+  font-size: 11.5px;
+}
+
+.infoBanner p {
+  margin: 2px 0 0;
+  color: #7d746d;
+  font-size: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 16px;
+}
+
+.calcCard {
+  --accent: #ff8a1f;
+  --accent-soft: #fff3e6;
+  --accent-border: #ffd3ae;
+
+  display: flex;
+  min-height: 230px;
+  flex-direction: column;
+  padding: 17px;
+  border: 1px solid #ede7e1;
+  border-radius: 18px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 12px 30px rgba(23,23,23,.03);
+  transition: transform .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+
+.calcCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-border);
+  box-shadow: 0 16px 34px rgba(23,23,23,.065);
+}
+
+.orange { --accent:#ff8a1f; --accent-soft:#fff3e6; --accent-border:#ffd3ae; }
+.blue { --accent:#2883bd; --accent-soft:#edf7ff; --accent-border:#cce7fb; }
+.amber { --accent:#c98a00; --accent-soft:#fff8dd; --accent-border:#f2df9a; }
+.green { --accent:#299659; --accent-soft:#edf9f1; --accent-border:#cdebd6; }
+.violet { --accent:#8056c8; --accent-soft:#f5f0ff; --accent-border:#ded0f6; }
+.rose { --accent:#c75d71; --accent-soft:#fff0f3; --accent-border:#f2cbd3; }
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calcIcon {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 20px;
+}
+
+.arrow {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ede7e1;
+  border-radius: 9px;
+  color: #918981;
+  font-size: 14px;
+}
+
+.calcContent {
+  flex: 1;
+  padding-top: 18px;
+}
+
+.meta {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+.calcContent h2 {
+  margin: 0;
+  color: #171717;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -.025em;
+}
+
+.calcContent p {
+  margin: 7px 0 0;
+  color: #7d746d;
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+.cardFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 13px;
+  border-top: 1px solid #f0ebe7;
+  color: #6e6761;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.calcCard:hover .cardFoot {
+  color: var(--accent);
+}
+
+.empty {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  border: 1px dashed #ddd5ce;
+  border-radius: 18px;
+  background: #fff;
+  text-align: center;
+}
+
+.empty > span {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  border-radius: 13px;
+  background: #fff3e6;
+  color: #ff8a1f;
+  font-size: 21px;
+}
+
+.empty strong {
+  color: #514b46;
+  font-size: 13px;
+}
+
+.empty p {
+  max-width: 420px;
+  margin: 5px 0 0;
+  color: #918981;
+  font-size: 10.5px;
+}
+
+/* dark */
+:global(html[data-theme="dark"]) .heading h1,
+:global(html[data-theme="dark"]) .calcContent h2,
+:global(html[data-theme="dark"]) .infoBanner strong,
+:global(html[data-theme="dark"]) .empty strong {
+  color: #f7f5f2;
+}
+
+:global(html[data-theme="dark"]) .heading p,
+:global(html[data-theme="dark"]) .calcContent p,
+:global(html[data-theme="dark"]) .infoBanner p {
+  color: #beb6ae;
+}
+
+:global(html[data-theme="dark"]) .companyPill,
+:global(html[data-theme="dark"]) .calcCard,
+:global(html[data-theme="dark"]) .empty {
+  border-color: #5b554e;
+  background: #292622;
+  color: #c8c1b9;
+}
+
+:global(html[data-theme="dark"]) .infoBanner {
+  border-color: #6d4a2b;
+  background: linear-gradient(135deg,rgba(255,138,31,.12),rgba(255,138,31,.055));
+}
+
+:global(html[data-theme="dark"]) .infoIcon {
+  background: #211f1c;
+}
+
+:global(html[data-theme="dark"]) .arrow {
+  border-color: #5b554e;
+  color: #aaa39b;
+}
+
+:global(html[data-theme="dark"]) .cardFoot {
+  border-top-color: #403b36;
+  color: #aaa39b;
+}
+
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page {
+    padding: 18px 14px 40px;
+  }
+
+  .heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .heading h1 {
+    font-size: 24px;
+  }
+
+  .companyPill {
+    max-width: 100%;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calcCard {
+    min-height: 210px;
+  }
+}
