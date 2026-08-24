@@ -4,7 +4,9 @@ import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
 import { AppHeader } from '@/components/app/header'
+import { OnboardingHeader } from '@/components/app/onboarding-header'
 import { AppSidebar } from '@/components/app/sidebar'
+
 import type { NotificationItem } from '@/components/app/notification-dropdown'
 
 type AppUser = {
@@ -36,10 +38,22 @@ export function AppShell({
           : 'main-wrapper'
       }
     >
-      <AppHeader
-        user={user}
-        notifications={notifications}
-      />
+
+      {/* HEADER SELON LE CONTEXTE */}
+
+      {isOnboarding ? (
+        <OnboardingHeader
+          user={user}
+          notifications={notifications}
+        />
+      ) : (
+        <AppHeader
+          user={user}
+          notifications={notifications}
+        />
+      )}
+
+      {/* PAS DE SIDEBAR SUR ONBOARDING */}
 
       {!isOnboarding && (
         <AppSidebar user={user} />

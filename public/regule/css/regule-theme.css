@@ -2872,32 +2872,163 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
 }
 
 
-/* 057. ONBOARDING — HEADER MOBILE SIMPLIFIÉ — PAS DE SIDEBAR PENDANT L’ONBOARDING : LOGO À GAUCHE, MENU À DROITE. — LES AUTRES PAGES MOBILES CONSERVENT LEUR BOUTON HAMBURGER. */
-@media (max-width: 991.98px) {
-  .main-wrapper.onboarding-mode .fiscow-mobile-header {
-    grid-template-columns: 1fr 44px;
-    gap: 10px;
-  }
+/* 057-B. ONBOARDING HEADER — VERSION SPÉCIFIQUE FISCOW */
 
-  .main-wrapper.onboarding-mode .fiscow-mobile-menu-btn {
-    display: none !important;
-  }
+.fiscow-onboarding-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 
-  .main-wrapper.onboarding-mode .fiscow-mobile-logo {
-    justify-self: start;
-  }
+  width: 100%;
+  height: 72px;
 
-  .main-wrapper.onboarding-mode .fiscow-mobile-user-menu {
-    justify-self: end;
-  }
+  background: #1d1a17;
+  border-bottom: 1px solid #48423c;
 }
 
-@media (max-width: 420px) {
-  .main-wrapper.onboarding-mode .fiscow-mobile-header {
-    grid-template-columns: 1fr 40px;
-  }
+.fiscow-onboarding-header-inner {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 22px;
 }
 
+.fiscow-onboarding-logo {
+  color: #ffffff;
+
+  font-size: 28px;
+  font-weight: 800;
+
+  letter-spacing: -1.2px;
+
+  text-decoration: none;
+}
+
+.fiscow-onboarding-logo span {
+  color: #ff8a1f;
+}
+
+.fiscow-onboarding-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.fiscow-onboarding-header-icon {
+  width: 42px;
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: #d1cbc5;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.fiscow-onboarding-header-icon:hover {
+  background: #282521;
+}
+
+.fiscow-onboarding-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+  color: #ffffff;
+
+  cursor: pointer;
+}
+
+.fiscow-onboarding-avatar {
+  width: 46px;
+  height: 46px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #7a4b24;
+  border-radius: 50%;
+
+  background: #3a291b;
+  color: #ff8a1f;
+
+  font-weight: 700;
+}
+
+.fiscow-onboarding-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  line-height: 1.2;
+}
+
+.fiscow-onboarding-user-info strong {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.fiscow-onboarding-user-info small {
+  margin-top: 3px;
+
+  color: #9e9790;
+  font-size: 11px;
+}
+
+/* LIGHT MODE ONBOARDING HEADER RESTE SOMBRE */
+
+html:not([data-theme="dark"])
+.fiscow-onboarding-header {
+  background: #1d1a17;
+}
+
+/* MOBILE */
+
+@media (max-width: 767.98px) {
+
+  .fiscow-onboarding-header {
+    height: 64px;
+  }
+
+  .fiscow-onboarding-header-inner {
+    padding: 0 14px;
+  }
+
+  .fiscow-onboarding-logo {
+    font-size: 24px;
+  }
+
+  .fiscow-onboarding-user-info {
+    display: none;
+  }
+
+  .fiscow-onboarding-header-actions {
+    gap: 8px;
+  }
+
+  .fiscow-onboarding-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
 
 /* 058. FISCOW — SIDEBAR APP — VERSION NETTOYÉE : DESKTOP + COLLAPSED + DARK + MOBILE */
 
