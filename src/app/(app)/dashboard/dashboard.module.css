@@ -826,3 +826,382 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* MOBILE SCORE BAR */
+
+.mobileScoreBlock {
+  display: none;
+}
+
+.mobileScoreHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.mobileScoreHead > div > span {
+  display: block;
+  margin-bottom: 2px;
+  color: #8b837c;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.mobileScoreHead > div > strong {
+  color: #171717;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.mobileScoreStatus {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #fff3e6;
+  color: #e9740b;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.mobileProgressTrack {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #f2ece6;
+}
+
+.mobileProgressBar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #ff8a1f,
+    #ffad62
+  );
+  transition: width .35s ease;
+}
+
+.mobileScoreStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.mobileScoreStat {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px;
+  border: 1px solid #eee8e2;
+  border-radius: 10px;
+  background: #fffdfc;
+}
+
+.mobileScoreStat > span {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+}
+
+.mobileScoreStat strong,
+.mobileScoreStat small {
+  display: block;
+}
+
+.mobileScoreStat strong {
+  color: #171717;
+  font-size: 11px;
+}
+
+.mobileScoreStat small {
+  margin-top: 1px;
+  color: #8b837c;
+  font-size: 8px;
+}
+
+/* =========================================================
+   MOBILE DASHBOARD
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+  .page {
+    padding: 16px 12px 30px;
+  }
+
+  .pageHead {
+    margin-bottom: 14px;
+  }
+
+  .pageHead h1 {
+    font-size: 24px;
+  }
+
+  .pageHead p {
+    font-size: 10px;
+    line-height: 1.55;
+  }
+
+  /* SCORE */
+
+  .scoreRing {
+    display: none;
+  }
+
+  .scoreLegend {
+    display: none;
+  }
+
+  .mobileScoreBlock {
+    display: block;
+    width: 100%;
+  }
+
+  .scoreContent {
+    display: block;
+    margin-top: 14px;
+  }
+
+  .scoreCard {
+    width: 100%;
+  }
+
+  .mobileScoreHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .mobileScoreHead > div > span {
+    display: block;
+    margin-bottom: 2px;
+    color: #8b837c;
+    font-size: 9px;
+  }
+
+  .mobileScoreHead > div > strong {
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .mobileScoreStatus {
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #fff3e6;
+    color: #e9740b;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .mobileProgressTrack {
+    width: 100%;
+    height: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #f2ece6;
+  }
+
+  .mobileProgressBar {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+      90deg,
+      #ff8a1f,
+      #ffad62
+    );
+    transition: width .35s ease;
+  }
+
+  .mobileScoreStats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .mobileScoreStat {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px;
+    border: 1px solid #eee8e2;
+    border-radius: 10px;
+    background: #fffdfc;
+  }
+
+  .mobileScoreStat > span {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+  }
+
+  .mobileScoreStat strong,
+  .mobileScoreStat small {
+    display: block;
+  }
+
+  .mobileScoreStat strong {
+    font-size: 11px;
+  }
+
+  .mobileScoreStat small {
+    margin-top: 1px;
+    color: #8b837c;
+    font-size: 8px;
+  }
+
+  /* GRILLES */
+
+  .topGrid,
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .kpiCard {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .kpiIcon {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .kpiCard strong {
+    font-size: 13px;
+    white-space: normal;
+  }
+
+  /* ÉCHÉANCE */
+
+  .deadlineBody {
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+  }
+
+  .deadlineAmount,
+  .daysBadge {
+    grid-column: 1 / -1;
+  }
+
+  .deadlineAmount {
+    padding-top: 10px;
+    border-top: 1px solid #eee8e2;
+  }
+
+  .daysBadge {
+    width: 100%;
+  }
+
+  /* GRAPHIQUE */
+
+  .chart {
+    min-height: 190px;
+  }
+
+  /* TRANSACTIONS */
+
+  .desktopTable {
+    display: none;
+  }
+
+  .mobileTransactions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .mobileTx {
+    padding: 12px;
+    border: 1px solid #ede7e1;
+    border-radius: 14px;
+    background: #fffdfc;
+  }
+
+  .mobileTxTop,
+  .mobileTxFoot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .mobileTxTop > div span,
+  .mobileTxTop > div strong {
+    display: block;
+  }
+
+  .mobileTxTop > div span {
+    margin-bottom: 2px;
+    color: #8b837c;
+    font-size: 8px;
+  }
+
+  .mobileTxTop > div strong {
+    font-size: 11px;
+  }
+
+  .mobileTxInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  .mobileTxInfo small,
+  .mobileTxInfo strong {
+    display: block;
+  }
+
+  .mobileTxInfo small {
+    margin-bottom: 3px;
+    color: #8b837c;
+    font-size: 8px;
+  }
+
+  .mobileTxInfo strong {
+    font-size: 10px;
+  }
+
+  .mobileTxFoot {
+    padding-top: 10px;
+    border-top: 1px solid #eee8e2;
+  }
+
+  .mobileTxFoot > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #756d66;
+    font-size: 8.5px;
+  }
+}
+
+@media (max-width: 420px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mobileScoreStats {
+    gap: 6px;
+  }
+
+  .mobileScoreStat {
+    padding: 8px 6px;
+  }
+}

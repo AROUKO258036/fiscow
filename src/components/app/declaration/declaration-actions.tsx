@@ -70,9 +70,6 @@ export function DeclarationActions({ declarationId, status }: Props) {
               <button type="submit" className="btn btn-success btn-sm" disabled={paidPending}>
                 {paidPending ? 'Enregistrement…' : 'Confirmer'}
               </button>
-              <button type="button" className="btn btn-link btn-sm text-muted" onClick={() => setShowPay(false)}>
-                Annuler
-              </button>
             </form>
           )}
           <form action={cancelAction} className="d-inline">

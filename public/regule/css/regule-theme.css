@@ -2880,10 +2880,10 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
   z-index: 1000;
 
   width: 100%;
-  height: 72px;
+  height: 52px;
 
-  background: #1d1a17;
-  border-bottom: 1px solid #48423c;
+  background: #ffffff;
+  border-bottom: 1px solid #ece7e1;
 }
 
 .fiscow-onboarding-header-inner {
@@ -2898,7 +2898,7 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
 }
 
 .fiscow-onboarding-logo {
-  color: #ffffff;
+  color: #171717;
 
   font-size: 28px;
   font-weight: 800;
@@ -2919,8 +2919,8 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
 }
 
 .fiscow-onboarding-header-icon {
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
 
   display: inline-flex;
   align-items: center;
@@ -2930,7 +2930,7 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
   border-radius: 50%;
 
   background: transparent;
-  color: #d1cbc5;
+  color: #6f6a65;
 
   font-size: 20px;
 
@@ -2938,7 +2938,8 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
 }
 
 .fiscow-onboarding-header-icon:hover {
-  background: #282521;
+  background: #fff3e8;
+  color: #ff8a1f;
 }
 
 .fiscow-onboarding-profile {
@@ -2951,24 +2952,24 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
   border: 0;
 
   background: transparent;
-  color: #ffffff;
+  color: #171717;
 
   cursor: pointer;
 }
 
 .fiscow-onboarding-avatar {
-  width: 46px;
-  height: 46px;
+  width: 36px;
+  height: 36px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #7a4b24;
+  border: 1px solid #ffd1a8;
   border-radius: 50%;
 
-  background: #3a291b;
-  color: #ff8a1f;
+  background: #fff3e8;
+  color: #ff7a00;
 
   font-weight: 700;
 }
@@ -2982,25 +2983,61 @@ html[data-theme="dark"] .fiscow-mobile-menu-separator {
 }
 
 .fiscow-onboarding-user-info strong {
-  color: #ffffff;
+  color: #171717;
+
   font-size: 14px;
 }
 
 .fiscow-onboarding-user-info small {
   margin-top: 3px;
 
-  color: #9e9790;
+  color: #8a847e;
+
   font-size: 11px;
 }
 
-/* LIGHT MODE ONBOARDING HEADER RESTE SOMBRE */
 
-html:not([data-theme="dark"])
-.fiscow-onboarding-header {
+/* 057-B1. ONBOARDING HEADER — DARK MODE */
+
+html[data-theme="dark"] .fiscow-onboarding-header {
   background: #1d1a17;
+  border-bottom-color: #48423c;
 }
 
-/* MOBILE */
+html[data-theme="dark"] .fiscow-onboarding-logo {
+  color: #f7f5f2;
+}
+
+html[data-theme="dark"] .fiscow-onboarding-header-icon {
+  color: #d1cbc5;
+}
+
+html[data-theme="dark"] .fiscow-onboarding-header-icon:hover {
+  background: #282521;
+  color: #ff9d45;
+}
+
+html[data-theme="dark"] .fiscow-onboarding-profile {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .fiscow-onboarding-avatar {
+  border-color: #7a4b24;
+
+  background: #3a291b;
+  color: #ff8a1f;
+}
+
+html[data-theme="dark"] .fiscow-onboarding-user-info strong {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .fiscow-onboarding-user-info small {
+  color: #9e9790;
+}
+
+
+/* 057-B2. ONBOARDING HEADER — MOBILE */
 
 @media (max-width: 767.98px) {
 

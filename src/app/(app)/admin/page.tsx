@@ -1,240 +1,822 @@
-import { requireAdmin } from '@/lib/require-admin'
-import { prisma } from '@/lib/prisma'
-import { PageHeader } from '@/components/app/page-header'
 import Link from 'next/link'
 
-function fmtFCFA(n: number): string {
-  return `${n.toLocaleString('fr-FR')} FCFA`
+import { requireAdmin } from '@/lib/require-admin'
+import { prisma } from '@/lib/prisma'
+
+import styles from './admin.module.css'
+
+const STATUS_LABELS: Record<string, string> = {
+  draft: 'Brouillon',
+  filed: 'Déposée',
+  paid: 'Payée',
+  cancelled: 'Annulée',
+}
+
+function fmtFCFA(value: number): string {
+  return `${value.toLocaleString('fr-FR')} FCFA`
+}
+
+function statusClass(status: string): string {
+  switch (status) {
+    case 'paid':
+      return styles.statusPaid
+
+    case 'filed':
+      return styles.statusFiled
+
+    case 'draft':
+      return styles.statusDraft
+
+    case 'cancelled':
+      return styles.statusCancelled
+
+    default:
+      return styles.statusNeutral
+  }
 }
 
 export default async function AdminPage() {
   const admin = await requireAdmin()
 
-  const [users, companies, declarations, transactions, taxRates, jobTitles] = await Promise.all([
+  const [
+    users,
+    companies,
+    declarations,
+    transactions,
+    taxRates,
+    jobTitles,
+  ] = await Promise.all([
     prisma.user.count(),
+
     prisma.company.count(),
+
     prisma.declaration.count(),
-    prisma.transaction.count({ where: { status: 'completed' } }),
+
+    prisma.transaction.count({
+      where: {
+        status: 'completed',
+      },
+    }),
+
     prisma.taxRate.count(),
+
     prisma.jobTitle.count(),
   ])
 
-  const [declarationsPerStatus, transactionsSum, recentUsers, recentDeclarations] = await Promise.all([
-    prisma.declaration.groupBy({ by: ['status'], _count: { _all: true } }),
-    prisma.transaction.aggregate({ where: { status: 'completed' }, _sum: { amount: true } }),
-    prisma.user.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 5,
-      select: { id: true, name: true, email: true, role: true, createdAt: true, emailVerifiedAt: true },
+  const [
+    declarationsPerStatus,
+    transactionsSum,
+    recentUsers,
+    recentDeclarations,
+  ] = await Promise.all([
+    prisma.declaration.groupBy({
+      by: ['status'],
+
+      _count: {
+        _all: true,
+      },
     }),
-    prisma.declaration.findMany({
-      orderBy: { createdAt: 'desc' },
+
+    prisma.transaction.aggregate({
+      where: {
+        status: 'completed',
+      },
+
+      _sum: {
+        amount: true,
+      },
+    }),
+
+    prisma.user.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+
       take: 5,
-      include: { company: { select: { raisonSociale: true } } },
+
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        emailVerifiedAt: true,
+      },
+    }),
+
+    prisma.declaration.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+
+      take: 5,
+
+      include: {
+        company: {
+          select: {
+            raisonSociale: true,
+          },
+        },
+      },
     }),
   ])
 
-  const statusLabels: Record<string, string> = {
-    draft: 'Brouillon',
-    filed: 'Déposée',
-    paid: 'Payée',
-    cancelled: 'Annulée',
-  }
-  const statusClasses: Record<string, string> = {
-    draft: 'bg-secondary',
-    filed: 'bg-info',
-    paid: 'bg-success',
-    cancelled: 'bg-danger',
-  }
-
-  const totalRevenue = Number(transactionsSum._sum.amount ?? 0)
+  const totalRevenue =
+    Number(
+      transactionsSum._sum.amount ??
+        0,
+    )
 
   return (
-    <>
-      <PageHeader title={`Administration — ${admin.name}`} crumbs={[{ label: 'Admin' }]} />
+    <main className={styles.page}>
 
-      <div className="row">
-        <div className="col-xl-3 col-md-6">
-          <div className="card">
-            <div className="card-body d-flex align-items-center justify-content-between">
-              <div>
-                <h4 className="mb-1">{users}</h4>
-                <p className="mb-0 text-muted fs-13">Utilisateurs</p>
-              </div>
-              <span className="avatar avatar-lg bg-primary-subtle text-primary">
-                <i className="ti ti-users fs-20"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
-          <div className="card">
-            <div className="card-body d-flex align-items-center justify-content-between">
-              <div>
-                <h4 className="mb-1">{companies}</h4>
-                <p className="mb-0 text-muted fs-13">Entreprises</p>
-              </div>
-              <span className="avatar avatar-lg bg-secondary-subtle text-secondary">
-                <i className="ti ti-building fs-20"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
-          <div className="card">
-            <div className="card-body d-flex align-items-center justify-content-between">
-              <div>
-                <h4 className="mb-1">{declarations}</h4>
-                <p className="mb-0 text-muted fs-13">Déclarations</p>
-              </div>
-              <span className="avatar avatar-lg bg-warning-subtle text-warning">
-                <i className="ti ti-file-invoice fs-20"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
-          <div className="card">
-            <div className="card-body d-flex align-items-center justify-content-between">
-              <div>
-                <h4 className="mb-1">{fmtFCFA(totalRevenue)}</h4>
-                <p className="mb-0 text-muted fs-13">Transactions ({transactions})</p>
-              </div>
-              <span className="avatar avatar-lg bg-success-subtle text-success">
-                <i className="ti ti-wallet fs-20"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* 01. EN-TÊTE */}
 
-      <div className="row mt-2">
-        <div className="col-xl-4 col-lg-6">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="mb-0">Déclarations par statut</h5>
+      <header className={styles.heading}>
+
+        <div>
+          <span className={styles.eyebrow}>
+            ESPACE ADMINISTRATEUR
+          </span>
+
+          <h1>
+            Administration
+          </h1>
+
+          <p>
+            Vue globale de l’activité,
+            des utilisateurs et des
+            données fiscales de Fiscow.
+          </p>
+        </div>
+
+        <div className={styles.adminIdentity}>
+          <span className={styles.adminAvatar}>
+            {admin.name
+              ?.trim()
+              .charAt(0)
+              .toUpperCase() || 'A'}
+          </span>
+
+          <div>
+            <span>Administrateur</span>
+            <strong>
+              {admin.name}
+            </strong>
+          </div>
+        </div>
+
+      </header>
+
+      {/* 02. INDICATEURS */}
+
+      <section className={styles.statsGrid}>
+
+        <StatCard
+          icon="ti ti-users"
+          label="Utilisateurs"
+          value={users.toLocaleString(
+            'fr-FR',
+          )}
+          description="comptes enregistrés"
+          tone="orange"
+        />
+
+        <StatCard
+          icon="ti ti-building"
+          label="Entreprises"
+          value={companies.toLocaleString(
+            'fr-FR',
+          )}
+          description="entreprises configurées"
+          tone="blue"
+        />
+
+        <StatCard
+          icon="ti ti-file-description"
+          label="Déclarations"
+          value={declarations.toLocaleString(
+            'fr-FR',
+          )}
+          description="déclarations créées"
+          tone="amber"
+        />
+
+        <StatCard
+          icon="ti ti-wallet"
+          label="Transactions"
+          value={fmtFCFA(
+            totalRevenue,
+          )}
+          description={`${transactions} paiement${
+            transactions > 1 ? 's' : ''
+          } enregistré${
+            transactions > 1 ? 's' : ''
+          }`}
+          tone="green"
+          smallValue
+        />
+
+      </section>
+
+      {/* 03. ACCÈS RAPIDES */}
+
+      <section className={styles.quickAccess}>
+
+        <div className={styles.sectionHeading}>
+          <div>
+            <span>
+              GESTION
+            </span>
+
+            <h2>
+              Accès rapides
+            </h2>
+          </div>
+        </div>
+
+        <div className={styles.quickGrid}>
+
+          <AdminLink
+            href="/admin/declarations"
+            icon="ti ti-files"
+            title="Déclarations"
+            description="Consulter et gérer toutes les déclarations."
+          />
+
+          <AdminLink
+            href="/admin/taux"
+            icon="ti ti-percentage"
+            title="Taux fiscaux"
+            description={`${taxRates} taux enregistrés dans Fiscow.`}
+          />
+
+          <AdminLink
+            href="/admin/metiers"
+            icon="ti ti-briefcase"
+            title="Métiers"
+            description={`${jobTitles} métiers configurés.`}
+          />
+
+        </div>
+
+      </section>
+
+      {/* 04. DONNÉES PRINCIPALES */}
+
+      <div className={styles.mainGrid}>
+
+        {/* STATUTS */}
+
+        <section className={styles.card}>
+
+          <div className={styles.cardHeader}>
+
+            <div className={styles.cardHeaderMain}>
+
+              <span className={styles.sectionIcon}>
+                <i className="ti ti-chart-donut" />
+              </span>
+
+              <div>
+                <h2>
+                  Déclarations par statut
+                </h2>
+
+                <p>
+                  Répartition des déclarations
+                  enregistrées.
+                </p>
+              </div>
+
             </div>
-            <div className="card-body">
-              <ul className="list-unstyled mb-0">
-                {Object.entries(statusLabels).map(([key, label]) => {
-                  const count = declarationsPerStatus.find((d) => d.status === key)?._count._all ?? 0
-                  return (
-                    <li key={key} className="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+          </div>
+
+          <div className={styles.statusList}>
+
+            {Object.entries(
+              STATUS_LABELS,
+            ).map(
+              ([key, label]) => {
+                const count =
+                  declarationsPerStatus.find(
+                    (item) =>
+                      item.status ===
+                      key,
+                  )?._count._all ?? 0
+
+                const percentage =
+                  (
+                    (count /
+                      Math.max(
+                        1,
+                        declarations,
+                      )) *
+                    100
+                  ).toFixed(0)
+
+                return (
+                  <div
+                    key={key}
+                    className={
+                      styles.statusRow
+                    }
+                  >
+                    <div
+                      className={
+                        styles.statusRowTop
+                      }
+                    >
+                      <div>
+                        <span
+                          className={`${styles.statusBadge} ${statusClass(
+                            key,
+                          )}`}
+                        >
+                          {label}
+                        </span>
+
+                        <strong>
+                          {count}
+                        </strong>
+                      </div>
+
                       <span>
-                        <span className={`badge ${statusClasses[key]} me-2`}>{label}</span>
-                        {count}
+                        {percentage} %
                       </span>
-                      <span className="text-muted fs-13">{((count / Math.max(1, declarations)) * 100).toFixed(0)}%</span>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
+                    </div>
+
+                    <div
+                      className={
+                        styles.statusProgress
+                      }
+                    >
+                      <div
+                        style={{
+                          width: `${percentage}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )
+              },
+            )}
+
           </div>
-        </div>
-        <div className="col-xl-8 col-lg-6">
-          <div className="card">
-            <div className="card-header d-flex align-items-center justify-content-between">
-              <h5 className="mb-0">Dernières déclarations</h5>
-              <Link href="/admin/declarations" className="btn btn-sm btn-primary">
-                Tout voir
-              </Link>
+
+        </section>
+
+        {/* DERNIÈRES DÉCLARATIONS */}
+
+        <section
+          className={`${styles.card} ${styles.declarationsCard}`}
+        >
+
+          <div className={styles.cardHeader}>
+
+            <div className={styles.cardHeaderMain}>
+
+              <span className={styles.sectionIcon}>
+                <i className="ti ti-file-invoice" />
+              </span>
+
+              <div>
+                <h2>
+                  Dernières déclarations
+                </h2>
+
+                <p>
+                  Activité fiscale récente
+                  de la plateforme.
+                </p>
+              </div>
+
             </div>
-            <div className="card-body p-0">
-              <div className="table-responsive">
-                <table className="table table-nowrap mb-0">
-                  <thead>
-                    <tr>
-                      <th>Entreprise</th>
-                      <th>Type</th>
-                      <th>Période</th>
-                      <th>Montant</th>
-                      <th>Statut</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentDeclarations.map((d) => (
-                      <tr key={d.id}>
-                        <td>{d.company?.raisonSociale ?? '—'}</td>
-                        <td>{d.type.toUpperCase()}</td>
-                        <td>{d.periode}</td>
-                        <td>{fmtFCFA(Number(d.amountDue))}</td>
+
+            <Link
+              href="/admin/declarations"
+              className={
+                styles.textButton
+              }
+            >
+              Tout voir
+
+              <i className="ti ti-arrow-right" />
+            </Link>
+
+          </div>
+
+          <div className={styles.tableWrapper}>
+
+            <table className={styles.table}>
+
+              <thead>
+                <tr>
+                  <th>
+                    Entreprise
+                  </th>
+
+                  <th>
+                    Type
+                  </th>
+
+                  <th>
+                    Période
+                  </th>
+
+                  <th>
+                    Montant
+                  </th>
+
+                  <th>
+                    Statut
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {recentDeclarations.length ===
+                0 ? (
+                  <tr>
+                    <td colSpan={5}>
+
+                      <EmptyState
+                        icon="ti ti-file-off"
+                        title="Aucune déclaration"
+                        description="Les nouvelles déclarations apparaîtront ici."
+                      />
+
+                    </td>
+                  </tr>
+                ) : (
+                  recentDeclarations.map(
+                    (declaration) => (
+                      <tr
+                        key={
+                          declaration.id
+                        }
+                      >
                         <td>
-                          <span className={`badge ${statusClasses[d.status]}`}>{statusLabels[d.status]}</span>
+                          <strong
+                            className={
+                              styles.companyName
+                            }
+                          >
+                            {declaration
+                              .company
+                              ?.raisonSociale ??
+                              '—'}
+                          </strong>
                         </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="row mt-2">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header d-flex align-items-center justify-content-between">
-              <h5 className="mb-0">Référentiels</h5>
-              <div className="d-flex gap-2">
-                <Link href="/admin/taux" className="btn btn-sm btn-outline-primary">
-                  Taux ({taxRates})
-                </Link>
-                <Link href="/admin/metiers" className="btn btn-sm btn-outline-primary">
-                  Métiers ({jobTitles})
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="row mt-2">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="mb-0">Derniers utilisateurs</h5>
-            </div>
-            <div className="card-body p-0">
-              <div className="table-responsive">
-                <table className="table table-nowrap mb-0">
-                  <thead>
-                    <tr>
-                      <th>Nom</th>
-                      <th>Email</th>
-                      <th>Rôle</th>
-                      <th>Email vérifié</th>
-                      <th>Inscrit le</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentUsers.map((u) => (
-                      <tr key={u.id}>
-                        <td>{u.name}</td>
-                        <td>{u.email}</td>
                         <td>
-                          <span className={`badge ${u.role === 'ADMIN' ? 'bg-primary' : 'bg-secondary'}`}>
-                            {u.role}
+                          <span
+                            className={
+                              styles.taxBadge
+                            }
+                          >
+                            {declaration.type.toUpperCase()}
                           </span>
                         </td>
+
                         <td>
-                          {u.emailVerifiedAt ? (
-                            <span className="badge bg-success">Vérifié</span>
-                          ) : (
-                            <span className="badge bg-warning text-dark">En attente</span>
+                          {
+                            declaration.periode
+                          }
+                        </td>
+
+                        <td
+                          className={
+                            styles.money
+                          }
+                        >
+                          {fmtFCFA(
+                            Number(
+                              declaration.amountDue,
+                            ),
                           )}
                         </td>
-                        <td>{u.createdAt?.toLocaleDateString('fr-FR')}</td>
+
+                        <td>
+                          <span
+                            className={`${styles.statusBadge} ${statusClass(
+                              declaration.status,
+                            )}`}
+                          >
+                            {STATUS_LABELS[
+                              declaration.status
+                            ] ??
+                              declaration.status}
+                          </span>
+                        </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                    ),
+                  )
+                )}
+
+              </tbody>
+
+            </table>
+
           </div>
-        </div>
+
+        </section>
+
       </div>
-    </>
+
+      {/* 05. UTILISATEURS */}
+
+      <section className={styles.card}>
+
+        <div className={styles.cardHeader}>
+
+          <div className={styles.cardHeaderMain}>
+
+            <span className={styles.sectionIcon}>
+              <i className="ti ti-user-plus" />
+            </span>
+
+            <div>
+              <h2>
+                Derniers utilisateurs
+              </h2>
+
+              <p>
+                Comptes récemment créés
+                sur Fiscow.
+              </p>
+            </div>
+
+          </div>
+
+          <span className={styles.countBadge}>
+            {users}
+          </span>
+
+        </div>
+
+        <div className={styles.tableWrapper}>
+
+          <table className={styles.table}>
+
+            <thead>
+              <tr>
+                <th>
+                  Utilisateur
+                </th>
+
+                <th>
+                  Email
+                </th>
+
+                <th>
+                  Rôle
+                </th>
+
+                <th>
+                  Vérification
+                </th>
+
+                <th>
+                  Inscription
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {recentUsers.map(
+                (user) => {
+                  const initial =
+                    user.name
+                      ?.trim()
+                      .charAt(0)
+                      .toUpperCase() ||
+                    user.email
+                      ?.trim()
+                      .charAt(0)
+                      .toUpperCase() ||
+                    'U'
+
+                  return (
+                    <tr key={user.id}>
+
+                      <td>
+                        <div
+                          className={
+                            styles.userCell
+                          }
+                        >
+                          <span
+                            className={
+                              styles.userAvatar
+                            }
+                          >
+                            {initial}
+                          </span>
+
+                          <strong>
+                            {user.name}
+                          </strong>
+                        </div>
+                      </td>
+
+                      <td
+                        className={
+                          styles.email
+                        }
+                      >
+                        {user.email}
+                      </td>
+
+                      <td>
+                        <span
+                          className={
+                            user.role ===
+                            'ADMIN'
+                              ? styles.adminRole
+                              : styles.userRole
+                          }
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+
+                      <td>
+                        <span
+                          className={
+                            user.emailVerifiedAt
+                              ? styles.verified
+                              : styles.pending
+                          }
+                        >
+                          <i
+                            className={
+                              user.emailVerifiedAt
+                                ? 'ti ti-circle-check'
+                                : 'ti ti-clock'
+                            }
+                          />
+
+                          {user.emailVerifiedAt
+                            ? 'Vérifié'
+                            : 'En attente'}
+                        </span>
+                      </td>
+
+                      <td>
+                        {user.createdAt
+                          ?.toLocaleDateString(
+                            'fr-FR',
+                          ) ??
+                          '—'}
+                      </td>
+
+                    </tr>
+                  )
+                },
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </main>
+  )
+}
+
+function StatCard({
+  icon,
+  label,
+  value,
+  description,
+  tone,
+  smallValue = false,
+}: {
+  icon: string
+  label: string
+  value: string
+  description: string
+  tone:
+    | 'orange'
+    | 'blue'
+    | 'amber'
+    | 'green'
+  smallValue?: boolean
+}) {
+  return (
+    <article
+      className={styles.statCard}
+    >
+      <span
+        className={`${styles.statIcon} ${
+          styles[
+            `tone${
+              tone
+                .charAt(0)
+                .toUpperCase() +
+              tone.slice(1)
+            }`
+          ]
+        }`}
+      >
+        <i className={icon} />
+      </span>
+
+      <div>
+        <span>
+          {label}
+        </span>
+
+        <strong
+          className={
+            smallValue
+              ? styles.smallStatValue
+              : undefined
+          }
+        >
+          {value}
+        </strong>
+
+        <small>
+          {description}
+        </small>
+      </div>
+    </article>
+  )
+}
+
+function AdminLink({
+  href,
+  icon,
+  title,
+  description,
+}: {
+  href: string
+  icon: string
+  title: string
+  description: string
+}) {
+  return (
+    <Link
+      href={href}
+      className={styles.quickCard}
+    >
+      <span
+        className={
+          styles.quickIcon
+        }
+      >
+        <i className={icon} />
+      </span>
+
+      <div>
+        <strong>
+          {title}
+        </strong>
+
+        <p>
+          {description}
+        </p>
+      </div>
+
+      <i
+        className={`ti ti-chevron-right ${styles.quickArrow}`}
+      />
+    </Link>
+  )
+}
+
+function EmptyState({
+  icon,
+  title,
+  description,
+}: {
+  icon: string
+  title: string
+  description: string
+}) {
+  return (
+    <div
+      className={styles.emptyState}
+    >
+      <span>
+        <i className={icon} />
+      </span>
+
+      <strong>
+        {title}
+      </strong>
+
+      <p>
+        {description}
+      </p>
+    </div>
   )
 }

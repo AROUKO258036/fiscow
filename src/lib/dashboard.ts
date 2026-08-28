@@ -86,11 +86,34 @@ export async function getTotalCount(companyId: number): Promise<number> {
   })
 }
 
-export async function getComplianceScore(companyId: number): Promise<number> {
-  const total = await getTotalCount(companyId)
-  if (total === 0) return 0
-  const done = await getCompletedCount(companyId)
-  return Math.round((done / total) * 100)
+export async function getComplianceScore(
+  companyId: number,
+): Promise<number> {
+  const total =
+    await prisma.declaration.count({
+      where: {
+        companyId,
+        status: {
+          not: 'cancelled',
+        },
+      },
+    })
+
+  if (total === 0) {
+    return 0
+  }
+
+  const completed =
+    await prisma.declaration.count({
+      where: {
+        companyId,
+        status: 'paid',
+      },
+    })
+
+  return Math.round(
+    (completed / total) * 100,
+  )
 }
 
 export async function getChartData(companyId: number) {

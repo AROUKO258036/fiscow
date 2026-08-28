@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 5
 
 export function OnboardingShell({
   step,
@@ -15,7 +15,8 @@ export function OnboardingShell({
     <section className="fiscow-onboarding">
       <div className="fiscow-onboarding-wrapper">
 
-        {/* Progression */}
+        {/* PROGRESSION */}
+
         <div className="fiscow-onboarding-progress">
           {Array.from({ length: TOTAL_STEPS }).map((_, index) => {
             const current = index + 1
