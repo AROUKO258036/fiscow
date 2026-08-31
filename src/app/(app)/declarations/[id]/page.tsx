@@ -11,7 +11,7 @@ import { prisma } from '@/lib/prisma'
 
 import {
   DeclarationActions,
-} from '@/components/app/declaration/declaration-actions'
+} from '../declaration-actions'
 
 import {
   DeclarationExport,
@@ -341,50 +341,30 @@ export default async function DeclarationShowPage({
       }
     >
 
-      {/* HEADER */}
+    {/* =====================================================
+    HEADER PAGE
+    ===================================================== */}
 
-      <section
-        className={
-          styles.pageHeader
-        }
-      >
-        <div>
-          <div
-            className={
-              styles.eyebrow
-            }
-          >
-            SUIVI FISCAL
-          </div>
+      <section className={styles.pageHeader}>
+
+        <div className={styles.pageHeading}>
+          <span className={styles.eyebrow}>
+            Suivi fiscal
+          </span>
 
           <h1>
-            Déclaration{' '}
+            Déclaration
           </h1>
-
-          <div
-            className={
-              styles.breadcrumb
-            }
-          >
-          </div>
         </div>
 
-        <div
-          className={
-            styles.headerActions
-          }
-        >
+        <div className={styles.headerActions}>
           <DeclarationExport
-            data={
-              exportData
-            }
+            data={exportData}
           />
 
           <Link
             href="/declarations"
-            className={
-              styles.backButton
-            }
+            className={styles.backButton}
           >
             <i className="ti ti-arrow-left" />
 
@@ -393,6 +373,7 @@ export default async function DeclarationShowPage({
             </span>
           </Link>
         </div>
+
       </section>
 
       {/* SUMMARY */}

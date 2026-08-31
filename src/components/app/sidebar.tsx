@@ -3,7 +3,17 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+
 import { TermeExplicable } from '@/components/app/terme-explicable'
+import {
+  GlobalReportExport,
+  type GlobalReportCompany,
+  type GlobalReportDeclaration,
+} from '@/components/app/report/global-report-export'
+
+/* =========================================================
+   [01] HELPERS
+   ========================================================= */
 
 function isActive(pathname: string, match: string): boolean {
   if (match === '/dashboard') return pathname === '/dashboard'
@@ -18,17 +28,34 @@ function isActive(pathname: string, match: string): boolean {
   return pathname.startsWith(match)
 }
 
-export function AppSidebar({
-  user,
-}: {
+/* =========================================================
+   [02] TYPES
+   ========================================================= */
+
+type AppSidebarProps = {
   user?: {
     name?: string | null
     role?: string | null
   }
-}) {
+
+  reportCompany?: GlobalReportCompany
+
+  reportDeclarations?: GlobalReportDeclaration[]
+}
+
+/* =========================================================
+   [03] SIDEBAR
+   ========================================================= */
+
+export function AppSidebar({
+  user,
+  reportCompany,
+  reportDeclarations = [],
+}: AppSidebarProps) {
   const pathname = usePathname()
 
   const [collapsed, setCollapsed] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const isAdmin = user?.role === 'ADMIN'
 
@@ -49,6 +76,10 @@ export function AppSidebar({
 
   const calcOpen =
     pathname.startsWith('/calculateurs')
+
+  /* =======================================================
+     [03.1] ÉTAT SIDEBAR DESKTOP
+     ======================================================= */
 
   useEffect(() => {
     const saved =
@@ -79,6 +110,44 @@ export function AppSidebar({
     }
   }, [collapsed])
 
+  /* =======================================================
+     [03.2] DÉTECTION MOBILE
+     ======================================================= */
+
+  useEffect(() => {
+    const media = window.matchMedia(
+      '(max-width: 991.98px)',
+    )
+
+    const update = () => {
+      setIsMobile(media.matches)
+    }
+
+    update()
+
+    media.addEventListener?.('change', update)
+
+    return () => {
+      media.removeEventListener?.('change', update)
+    }
+  }, [])
+
+  /* =======================================================
+     [03.3] EXPORT CSV GLOBAL
+     ======================================================= */
+
+  function exportGlobalCsv() {
+    const button = document.getElementById(
+      'dashboard-export-csv',
+    ) as HTMLButtonElement | null
+
+    button?.click()
+  }
+
+  /* =======================================================
+     [04] RENDER
+     ======================================================= */
+
   return (
     <div
       className={`sidebar fiscow-sidebar ${
@@ -86,17 +155,24 @@ export function AppSidebar({
       }`}
       id="sidebar"
     >
-      {/* LOGO */}
+      {/* ===================================================
+          [04.1] LOGO
+          =================================================== */}
+
       <div className="fiscow-sidebar-brand">
-       <button
+        <button
           type="button"
           className="fiscow-sidebar-logo-button"
           onClick={() => {
             if (
               typeof window !== 'undefined' &&
-              window.matchMedia('(min-width: 992px)').matches
+              window
+                .matchMedia('(min-width: 992px)')
+                .matches
             ) {
-              document.body.classList.toggle('mini-sidebar')
+              document.body.classList.toggle(
+                'mini-sidebar',
+              )
             }
           }}
           aria-label="Réduire ou ouvrir la sidebar"
@@ -111,7 +187,10 @@ export function AppSidebar({
         </button>
       </div>
 
-      {/* NAV */}
+      {/* ===================================================
+          [04.2] NAVIGATION
+          =================================================== */}
+
       <div className="sidebar-inner">
         <div
           id="sidebar-menu"
@@ -124,7 +203,6 @@ export function AppSidebar({
               </li>
             )}
 
-            {/* DASHBOARD */}
             <SidebarItem
               href="/dashboard"
               icon="ti ti-layout-dashboard"
@@ -133,7 +211,6 @@ export function AppSidebar({
               collapsed={collapsed}
             />
 
-            {/* CALENDRIER */}
             <SidebarItem
               href="/calendrier-fiscal"
               icon="ti ti-calendar-event"
@@ -142,7 +219,6 @@ export function AppSidebar({
               collapsed={collapsed}
             />
 
-            {/* CALCULATEURS */}
             <li
               className={`submenu ${
                 calcOpen ? 'active' : ''
@@ -222,7 +298,6 @@ export function AppSidebar({
               )}
             </li>
 
-            {/* DECLARATIONS */}
             <SidebarItem
               href="/declarations"
               icon="ti ti-file-invoice"
@@ -231,7 +306,6 @@ export function AppSidebar({
               collapsed={collapsed}
             />
 
-            {/* CONFIGURATION */}
             <SidebarItem
               href="/entreprise/configuration"
               icon="ti ti-building"
@@ -240,7 +314,6 @@ export function AppSidebar({
               collapsed={collapsed}
             />
 
-            {/* PARAMETRES */}
             <SidebarItem
               href="/profile"
               icon="ti ti-settings"
@@ -268,11 +341,83 @@ export function AppSidebar({
                 />
               </>
             )}
+
+            {/* ===============================================
+                [04.3] EXPORTS GLOBAUX — MOBILE UNIQUEMENT
+                =============================================== */}
+
+            {isMobile && (
+              <li
+                style={{
+                  listStyle: 'none',
+                  margin: '18px 14px 8px',
+                  paddingTop: '16px',
+                  borderTop:
+                    '1px solid var(--fiscow-sidebar-export-border, #e8dfd6)',
+                }}
+              >
+                <div
+                  style={{
+                    marginBottom: '9px',
+                    paddingInline: '2px',
+                    fontSize: '9px',
+                    fontWeight: 800,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color:
+                      'var(--fiscow-sidebar-export-muted, #8c8178)',
+                  }}
+                >
+                  Exports
+                </div>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns:
+                      'minmax(0, 1fr)',
+                    gap: '8px',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={exportGlobalCsv}
+                    className="fiscow-dashboard-export-btn"
+                    style={{
+                      width: '100%',
+                      minHeight: '42px',
+                      justifyContent: 'flex-start',
+                    }}
+                  >
+                    <i className="ti ti-file-type-csv" />
+                    <span>Exporter CSV</span>
+                  </button>
+
+                  {reportCompany && (
+                    <div
+                      style={{
+                        width: '100%',
+                      }}
+                    >
+                      <GlobalReportExport
+                        company={reportCompany}
+                        declarations={
+                          reportDeclarations
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
+              </li>
+            )}
           </ul>
         </div>
       </div>
 
-      {/* FOOTER */}
+      {/* ===================================================
+          [04.4] FOOTER
+          =================================================== */}
+
       <div className="fiscow-sidebar-footer">
         {!collapsed && (
           <div className="fiscow-sidebar-help">
@@ -302,9 +447,96 @@ export function AppSidebar({
           {!collapsed && <span>Réduire</span>}
         </button>
       </div>
+
+      {/* ===================================================
+          [05] DARK MODE DES EXPORTS MOBILE
+          =================================================== */}
+
+      <style jsx global>{`
+        html[data-theme='dark'] {
+          --fiscow-sidebar-export-border: #48423c;
+          --fiscow-sidebar-export-muted: #b8b0a8;
+        }
+
+        @media (max-width: 991.98px) {
+          /*
+           * IMPORTANT :
+           * le bouton global utilise aussi la classe
+           * .fiscow-dashboard-export-btn.
+           * Dans le header, cette classe est masquée sur mobile.
+           * On la réactive explicitement uniquement dans la sidebar.
+           */
+          .fiscow-sidebar .fiscow-dashboard-export-btn,
+          .fiscow-sidebar button.fiscow-dashboard-export-btn {
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            min-height: 42px !important;
+
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 9px !important;
+
+            margin: 0 !important;
+            padding: 0 13px !important;
+
+            border: 1px solid #ff8a1f !important;
+            border-radius: 10px !important;
+
+            background: #ffffff !important;
+            color: #e86f00 !important;
+
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            line-height: 1 !important;
+
+            cursor: pointer !important;
+          }
+
+          .fiscow-sidebar .fiscow-dashboard-export-btn i {
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            flex: 0 0 auto !important;
+            color: #ff8a1f !important;
+            font-size: 16px !important;
+          }
+
+          .fiscow-sidebar .fiscow-dashboard-export-btn span {
+            display: inline !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+          }
+
+          html[data-theme='dark']
+            .fiscow-sidebar
+            .fiscow-dashboard-export-btn,
+          html[data-theme='dark']
+            .fiscow-sidebar
+            button.fiscow-dashboard-export-btn {
+            border-color: #5a544d !important;
+            background: #282521 !important;
+            color: #f3f0ec !important;
+          }
+
+          html[data-theme='dark']
+            .fiscow-sidebar
+            .fiscow-dashboard-export-btn i {
+            color: #ff8a1f !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }
+
+/* =========================================================
+   [06] SIDEBAR ITEM
+   ========================================================= */
 
 function SidebarItem({
   href,

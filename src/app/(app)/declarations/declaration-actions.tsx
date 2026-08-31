@@ -204,17 +204,28 @@ export function DeclarationActions({
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() =>
-                setShowPayment(true)
-              }
-              className={styles.payButton}
-            >
-              <i className="ti ti-wallet" />
+            <div className={styles.actionControls}>
+              <button
+                type="button"
+                onClick={() =>
+                  setShowPayment(true)
+                }
+                className={styles.payButton}
+              >
+                <i className="ti ti-wallet" />
 
-              Enregistrer un paiement
-            </button>
+                Enregistrer un paiement
+              </button>
+
+              <CancelZone
+                declarationId={declarationId}
+                showCancel={showCancel}
+                setShowCancel={setShowCancel}
+                action={cancelAction}
+                pending={cancelPending}
+                error={cancelState?.error}
+              />
+            </div>
 
           </div>
         ) : (
@@ -322,16 +333,7 @@ export function DeclarationActions({
           </div>
         )}
 
-        {!showPayment && (
-          <CancelZone
-            declarationId={declarationId}
-            showCancel={showCancel}
-            setShowCancel={setShowCancel}
-            action={cancelAction}
-            pending={cancelPending}
-            error={cancelState?.error}
-          />
-        )}
+        {showPayment && null}
 
       </div>
     )

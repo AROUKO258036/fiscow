@@ -8,6 +8,14 @@ import { OnboardingHeader } from '@/components/app/onboarding-header'
 import { AppSidebar } from '@/components/app/sidebar'
 
 import type { NotificationItem } from '@/components/app/notification-dropdown'
+import type {
+  GlobalReportCompany,
+  GlobalReportDeclaration,
+} from '@/components/app/report/global-report-export'
+
+/* =========================================================
+   [01] TYPES
+   ========================================================= */
 
 type AppUser = {
   name: string
@@ -15,20 +23,42 @@ type AppUser = {
   role?: string | null
 }
 
+type AppShellProps = {
+  children: ReactNode
+
+  user: AppUser
+
+  notifications: NotificationItem[]
+
+  reportCompany?: GlobalReportCompany
+
+  reportDeclarations?: GlobalReportDeclaration[]
+}
+
+/* =========================================================
+   [02] APP SHELL
+   ========================================================= */
+
 export function AppShell({
   children,
   user,
   notifications,
-}: {
-  children: ReactNode
-  user: AppUser
-  notifications: NotificationItem[]
-}) {
+  reportCompany,
+  reportDeclarations = [],
+}: AppShellProps) {
   const pathname = usePathname()
+
+  /* =======================================================
+     [02.1] MODE ONBOARDING
+     ======================================================= */
 
   const isOnboarding =
     pathname === '/entreprise/onboarding' ||
     pathname.startsWith('/entreprise/onboarding/')
+
+  /* =======================================================
+     [03] RENDER
+     ======================================================= */
 
   return (
     <div
@@ -38,8 +68,9 @@ export function AppShell({
           : 'main-wrapper'
       }
     >
-
-      {/* HEADER SELON LE CONTEXTE */}
+      {/* ===================================================
+          [03.1] HEADER SELON LE CONTEXTE
+          =================================================== */}
 
       {isOnboarding ? (
         <OnboardingHeader
@@ -50,14 +81,28 @@ export function AppShell({
         <AppHeader
           user={user}
           notifications={notifications}
+          reportCompany={reportCompany}
+          reportDeclarations={reportDeclarations}
         />
       )}
 
-      {/* PAS DE SIDEBAR SUR ONBOARDING */}
+      {/* ===================================================
+          [03.2] SIDEBAR
+          Les données d'export sont aussi transmises ici
+          pour afficher CSV + PDF dans le drawer mobile.
+          =================================================== */}
 
       {!isOnboarding && (
-        <AppSidebar user={user} />
+        <AppSidebar
+          user={user}
+          reportCompany={reportCompany}
+          reportDeclarations={reportDeclarations}
+        />
       )}
+
+      {/* ===================================================
+          [03.3] CONTENU
+          =================================================== */}
 
       <div
         className={

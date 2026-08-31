@@ -1,6 +1,15 @@
+/* =========================================================
+   [01] WRAPPER
+   ========================================================= */
+
 .wrapper {
   width: 100%;
 }
+
+
+/* =========================================================
+   [02] ACTION BAR
+   ========================================================= */
 
 .actionBar {
   display: flex;
@@ -47,6 +56,11 @@
   line-height: 1.45;
 }
 
+
+/* =========================================================
+   [03] BUTTONS — BASE
+   ========================================================= */
+
 .primaryButton,
 .payButton,
 .confirmButton,
@@ -57,37 +71,65 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
+  margin: 0;
   padding: 0 15px;
   border-radius: 10px;
   font-size: 10.5px;
   font-weight: 800;
+  line-height: 1;
   white-space: nowrap;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .primaryButton {
   border: 1px solid #ff8a1f;
   background: #ff8a1f;
-  color: #fff;
+  color: #ffffff;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #ed790f;
+  border-color: #ed790f;
 }
 
 .payButton,
 .confirmButton {
   border: 1px solid #13b95c;
   background: #13b95c;
-  color: #fff;
+  color: #ffffff;
+}
+
+.payButton:hover:not(:disabled),
+.confirmButton:hover:not(:disabled) {
+  background: #10a953;
+  border-color: #10a953;
 }
 
 .secondaryButton {
-  border: 1px solid #ddd5ce;
-  background: #fff;
-  color: #554d47;
+  border: 1px solid #e36868;
+  background: #ffffff;
+  color: #d94242;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: #fff7f7;
+  border-color: #d94242;
 }
 
 .dangerButton {
   border: 1px solid #dc4545;
   background: #dc4545;
-  color: #fff;
+  color: #ffffff;
+}
+
+.dangerButton:hover:not(:disabled) {
+  background: #c93a3a;
+  border-color: #c93a3a;
 }
 
 .primaryButton:disabled,
@@ -95,12 +137,14 @@
 .confirmButton:disabled,
 .secondaryButton:disabled,
 .dangerButton:disabled {
-  opacity: .55;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 
-/* PAYMENT */
+/* =========================================================
+   [04] PAYMENT PANEL
+   ========================================================= */
 
 .paymentPanel {
   width: 100%;
@@ -110,7 +154,13 @@
   margin-bottom: 14px;
 }
 
+
+/* =========================================================
+   [05] PAYMENT FORM — DESKTOP
+   ========================================================= */
+
 .paymentForm {
+  width: 100%;
   display: grid;
   grid-template-columns:
     minmax(180px, 1fr)
@@ -118,6 +168,15 @@
     auto;
   gap: 10px;
   align-items: end;
+}
+
+
+/* =========================================================
+   [06] FIELDS
+   ========================================================= */
+
+.field {
+  min-width: 0;
 }
 
 .field label {
@@ -137,48 +196,130 @@
 .field input {
   width: 100%;
   height: 40px;
+  min-width: 0;
   padding: 0 11px;
   border: 1px solid #e4ddd6;
   border-radius: 10px;
-  background: #fff;
+  background: #ffffff;
   color: #514b46;
   font-size: 10px;
   outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .field select:focus,
 .field input:focus {
   border-color: #ff9c47;
-  box-shadow: 0 0 0 3px rgba(255, 138, 31, .08);
+  box-shadow: 0 0 0 3px rgba(255, 138, 31, 0.08);
 }
+
+.field input::placeholder {
+  color: #aaa29a;
+}
+
+
+/* =========================================================
+   [07] CONFIRMER + ANNULER — DESKTOP
+   ========================================================= */
 
 .formActions {
   display: flex;
   align-items: center;
   gap: 7px;
+  margin: 0;
+}
+
+.formActions .confirmButton,
+.formActions .secondaryButton {
+  height: 40px;
+  min-height: 40px;
+  margin: 0;
 }
 
 
-/* CANCEL */
+
+
+/* =========================================================
+   [07.1] ACTIONS DROITE — DESKTOP
+   Paiement + annulation sur la même ligne
+   ========================================================= */
+
+.actionControls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex: 0 0 auto;
+}
+
+.actionControls .cancelShortcut {
+  width: auto;
+  margin-top: 0;
+  justify-content: flex-start;
+}
+
+.actionControls .cancelLink {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid #e8c8c8;
+  border-radius: 10px;
+  background: #fff7f7;
+  color: #c43b3b;
+}
+
+.actionControls .cancelLink:hover {
+  border-color: #dbaaaa;
+  background: #fff0f0;
+  color: #a92d2d;
+}
+
+
+/* =========================================================
+   [08] ANNULER LA DÉCLARATION — LIEN
+   ========================================================= */
 
 .cancelShortcut {
+  width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-top: 9px;
+  align-items: center;
+  margin-top: 8px;
 }
 
 .cancelLink {
+  min-height: 28px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  padding: 0;
+  margin: 0;
+  padding: 0 2px;
   border: 0;
   background: transparent;
-  color: #b33a3a;
+  color: #c43b3b;
   font-size: 9px;
-  font-weight: 650;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
 }
+
+.cancelLink i {
+  font-size: 10px;
+}
+
+.cancelLink:hover {
+  color: #a92d2d;
+}
+
+
+/* =========================================================
+   [09] PANNEAU ANNULATION DÉCLARATION
+   ========================================================= */
 
 .cancelPanel {
   margin-top: 12px;
@@ -200,6 +341,7 @@
   display: block;
   color: #9a2f2f;
   font-size: 11px;
+  font-weight: 800;
 }
 
 .cancelPanelHead p {
@@ -214,11 +356,16 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
+  padding: 0;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: #8f7676;
   cursor: pointer;
+}
+
+.closeButton:hover {
+  background: #f8eaea;
 }
 
 .cancelForm {
@@ -229,7 +376,9 @@
 }
 
 
-/* STATES */
+/* =========================================================
+   [10] STATES
+   ========================================================= */
 
 .successState,
 .cancelledState {
@@ -275,6 +424,7 @@
 .cancelledState strong {
   display: block;
   font-size: 11px;
+  font-weight: 800;
 }
 
 .successState p,
@@ -285,7 +435,9 @@
 }
 
 
-/* ERROR */
+/* =========================================================
+   [11] ERROR
+   ========================================================= */
 
 .error {
   display: flex;
@@ -293,6 +445,7 @@
   gap: 6px;
   margin-top: 9px;
   padding: 8px 10px;
+  border: 1px solid #f1cccc;
   border-radius: 9px;
   background: #fff0f0;
   color: #bd3535;
@@ -300,39 +453,189 @@
 }
 
 
-/* DARK */
+/* =========================================================
+   [12] DARK MODE — FISCOW
+   ========================================================= */
 
 :global(html[data-theme="dark"]) .actionText strong,
-:global(html[data-theme="dark"]) .field label {
-  color: #f4f0ec;
+:global(html[data-theme="dark"]) .field label,
+:global(html[data-theme="dark"]) .successState strong,
+:global(html[data-theme="dark"]) .cancelledState strong {
+  color: #f3f0ec;
+}
+
+:global(html[data-theme="dark"]) .actionText p,
+:global(html[data-theme="dark"]) .successState p,
+:global(html[data-theme="dark"]) .cancelledState p {
+  color: #b8b0a8;
+}
+
+:global(html[data-theme="dark"]) .field label span {
+  color: #8f877f;
+}
+
+:global(html[data-theme="dark"]) .actionIcon {
+  background: #302c27;
+  color: #ff8a1f;
+  border: 1px solid #48423c;
+}
+
+:global(html[data-theme="dark"]) .actionIconGreen {
+  background: #243329;
+  color: #5ed58b;
+  border-color: #35513e;
 }
 
 :global(html[data-theme="dark"]) .field select,
 :global(html[data-theme="dark"]) .field input {
-  border-color: #514b44;
-  background: #211f1c;
-  color: #f4f0ec;
+  border-color: #48423c;
+  background: #211e1a;
+  color: #f3f0ec;
+}
+
+:global(html[data-theme="dark"]) .field select:hover,
+:global(html[data-theme="dark"]) .field input:hover {
+  border-color: #5a544d;
+}
+
+:global(html[data-theme="dark"]) .field select:focus,
+:global(html[data-theme="dark"]) .field input:focus {
+  border-color: #ff8a1f;
+  box-shadow: 0 0 0 3px rgba(255, 138, 31, 0.12);
+}
+
+:global(html[data-theme="dark"]) .field input::placeholder {
+  color: #817970;
 }
 
 :global(html[data-theme="dark"]) .secondaryButton {
-  border-color: #514b44;
-  background: #302b26;
-  color: #f4f0ec;
+  border-color: #6a4949;
+  background: #28211f;
+  color: #ef8585;
+}
+
+:global(html[data-theme="dark"]) .secondaryButton:hover:not(:disabled) {
+  border-color: #815252;
+  background: #352626;
+}
+
+:global(html[data-theme="dark"]) .cancelLink {
+  color: #ee7777;
+}
+
+:global(html[data-theme="dark"]) .cancelLink:hover {
+  color: #ff9393;
 }
 
 :global(html[data-theme="dark"]) .cancelPanel {
   border-color: #684545;
-  background: #322525;
+  background: #2b211f;
+}
+
+:global(html[data-theme="dark"]) .cancelPanelHead strong {
+  color: #f08b8b;
+}
+
+:global(html[data-theme="dark"]) .cancelPanelHead p {
+  color: #c19a9a;
+}
+
+:global(html[data-theme="dark"]) .closeButton {
+  color: #b8aaa4;
+}
+
+:global(html[data-theme="dark"]) .closeButton:hover {
+  background: #382926;
+}
+
+:global(html[data-theme="dark"]) .successState {
+  border-color: #35513e;
+  background: #222c25;
+}
+
+:global(html[data-theme="dark"]) .successState > span {
+  background: #293d30;
+  color: #63d892;
+}
+
+:global(html[data-theme="dark"]) .cancelledState {
+  border-color: #684545;
+  background: #2d2220;
+}
+
+:global(html[data-theme="dark"]) .cancelledState > span {
+  background: #402927;
+  color: #f08080;
+}
+
+:global(html[data-theme="dark"]) .error {
+  border-color: #684545;
+  background: #2d2220;
+  color: #f08b8b;
 }
 
 
-/* MOBILE */
+
+
+:global(html[data-theme="dark"]) .actionControls .cancelLink {
+  border-color: #684545;
+  background: #2d2220;
+  color: #ee7777;
+}
+
+:global(html[data-theme="dark"]) .actionControls .cancelLink:hover {
+  border-color: #815252;
+  background: #382826;
+  color: #ff9393;
+}
+
+
+/* =========================================================
+   [13] TABLET
+   ========================================================= */
+
+@media (max-width: 900px) and (min-width: 768px) {
+  .paymentForm {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .formActions {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* =========================================================
+   [14] MOBILE
+   ========================================================= */
 
 @media (max-width: 767.98px) {
+
   .actionBar {
-    align-items: stretch;
+    width: 100%;
     flex-direction: column;
+    align-items: stretch;
     gap: 11px;
+  }
+
+  .actionText {
+    align-items: flex-start;
+  }
+
+  .actionIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+
+  .actionText strong {
+    font-size: 10.5px;
+  }
+
+  .actionText p {
+    font-size: 8.8px;
   }
 
   .primaryButton,
@@ -340,27 +643,123 @@
     width: 100%;
   }
 
-  .paymentForm {
-    grid-template-columns: 1fr;
-    gap: 9px;
+  .actionControls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
   }
 
-  .formActions {
-    display: grid;
-    grid-template-columns: 1fr auto;
+  .actionControls .cancelShortcut {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0;
   }
 
-  .confirmButton {
+  .actionControls .cancelLink {
+    min-height: 32px;
+    padding: 0 6px;
+    border: 0;
+    background: transparent;
+  }
+
+  .paymentPanel {
     width: 100%;
   }
 
-  .cancelShortcut {
+  .paymentHeader {
+    margin-bottom: 12px;
+  }
+
+  .paymentForm {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .field {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .field label {
+    margin-bottom: 6px;
+    font-size: 10px;
+  }
+
+  .field select,
+  .field input {
+    width: 100%;
+    height: 44px;
+    border-radius: 10px;
+    font-size: 10px;
+  }
+
+  .formActions {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr) !important;
+    gap: 8px;
+    margin-top: 2px;
+  }
+
+  .formActions .confirmButton,
+  .formActions .secondaryButton {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 46px;
+    min-height: 46px;
+    margin: 0 !important;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
+    justify-self: stretch;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .formActions .confirmButton {
+    border: 1px solid #13b95c;
+    background: #13b95c;
+    color: #ffffff;
+  }
+
+  .formActions .secondaryButton {
+    border: 1px solid #ed7777;
+    background: #ffffff;
+    color: #d94242;
+  }
+
+  :global(html[data-theme="dark"]) .formActions .secondaryButton {
+    border-color: #6a4949;
+    background: #28211f;
+    color: #ef8585;
+  }
+
+  .cancelShortcut {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 12px;
   }
 
+  .cancelLink {
+    min-height: 32px;
+    padding: 0 6px;
+    font-size: 9px;
+  }
+
   .cancelForm {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .dangerButton {
@@ -368,12 +767,35 @@
   }
 }
 
+
+/* =========================================================
+   [15] TRÈS PETIT MOBILE
+   ========================================================= */
+
 @media (max-width: 420px) {
   .formActions {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr) !important;
+    gap: 6px;
   }
 
-  .secondaryButton {
-    width: 100%;
+  .formActions .confirmButton,
+  .formActions .secondaryButton {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 43px;
+    min-height: 43px;
+    padding: 0 5px;
+    font-size: 9px;
+  }
+
+  .cancelShortcut {
+    margin-top: 10px;
+  }
+
+  .cancelLink {
+    min-height: 30px;
+    font-size: 8.8px;
   }
 }
