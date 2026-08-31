@@ -435,7 +435,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.navy,
+      COLORS.navy[0],
+      COLORS.navy[1],
+      COLORS.navy[2],
     )
 
     doc.text(
@@ -450,7 +452,9 @@ export function DeclarationExport({
       )
 
     doc.setTextColor(
-      ...COLORS.orange,
+      COLORS.orange[0],
+      COLORS.orange[1],
+      COLORS.orange[2],
     )
 
     doc.text(
@@ -471,7 +475,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.muted,
+      COLORS.muted[0],
+      COLORS.muted[1],
+      COLORS.muted[2],
     )
 
     doc.text(
@@ -481,7 +487,9 @@ export function DeclarationExport({
     )
 
     doc.setDrawColor(
-      ...COLORS.border,
+      COLORS.border[0],
+      COLORS.border[1],
+      COLORS.border[2],
     )
 
     doc.setLineWidth(
@@ -513,7 +521,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.orangeDark,
+      COLORS.orangeDark[0],
+      COLORS.orangeDark[1],
+      COLORS.orangeDark[2],
     )
 
     doc.text(
@@ -529,7 +539,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.navy,
+      COLORS.navy[0],
+      COLORS.navy[1],
+      COLORS.navy[2],
     )
 
     doc.text(
@@ -550,7 +562,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.muted,
+      COLORS.muted[0],
+      COLORS.muted[1],
+      COLORS.muted[2],
     )
 
     doc.text(
@@ -581,7 +595,9 @@ export function DeclarationExport({
       badgeWidth
 
     doc.setFillColor(
-      ...badgeColor,
+      badgeColor[0],
+      badgeColor[1],
+      badgeColor[2],
     )
 
     doc.roundedRect(
@@ -637,7 +653,9 @@ export function DeclarationExport({
     y += 7
 
     doc.setFillColor(
-      ...COLORS.soft,
+      COLORS.soft[0],
+      COLORS.soft[1],
+      COLORS.soft[2],
     )
 
     doc.roundedRect(
@@ -660,7 +678,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.navy,
+      COLORS.navy[0],
+      COLORS.navy[1],
+      COLORS.navy[2],
     )
 
     doc.text(
@@ -679,7 +699,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.muted,
+      COLORS.muted[0],
+      COLORS.muted[1],
+      COLORS.muted[2],
     )
 
     doc.text(
@@ -910,7 +932,9 @@ export function DeclarationExport({
       pageHeight - 14
 
     doc.setDrawColor(
-      ...COLORS.border,
+      COLORS.border[0],
+      COLORS.border[1],
+      COLORS.border[2],
     )
 
     doc.line(
@@ -931,7 +955,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.muted,
+      COLORS.muted[0],
+      COLORS.muted[1],
+      COLORS.muted[2],
     )
 
     doc.text(
@@ -946,7 +972,9 @@ export function DeclarationExport({
     )
 
     doc.setTextColor(
-      ...COLORS.navy,
+      COLORS.navy[0],
+      COLORS.navy[1],
+      COLORS.navy[2],
     )
 
     doc.text(
@@ -963,7 +991,9 @@ export function DeclarationExport({
       )
 
     doc.setTextColor(
-      ...COLORS.orange,
+      COLORS.orange[0],
+      COLORS.orange[1],
+      COLORS.orange[2],
     )
 
     doc.text(
@@ -1127,7 +1157,9 @@ function drawSectionTitle(
   )
 
   doc.setTextColor(
-    ...COLORS.orangeDark,
+    COLORS.orangeDark[0],
+    COLORS.orangeDark[1],
+    COLORS.orangeDark[2],
   )
 
   doc.text(
@@ -1151,7 +1183,9 @@ function drawInfoRow(
 
   if (alternate) {
     doc.setFillColor(
-      ...COLORS.soft,
+      COLORS.soft[0],
+      COLORS.soft[1],
+      COLORS.soft[2],
     )
 
     doc.rect(
@@ -1173,7 +1207,9 @@ function drawInfoRow(
   )
 
   doc.setTextColor(
-    ...COLORS.muted,
+    COLORS.muted[0],
+    COLORS.muted[1],
+    COLORS.muted[2],
   )
 
   doc.text(
@@ -1188,7 +1224,9 @@ function drawInfoRow(
   )
 
   doc.setTextColor(
-    ...COLORS.text,
+    COLORS.text[0],
+    COLORS.text[1],
+    COLORS.text[2],
   )
 
   doc.text(
@@ -1222,11 +1260,15 @@ function drawAmountBox(
     ],
 ) {
   doc.setFillColor(
-    ...COLORS.orangeSoft,
+    COLORS.orangeSoft[0],
+    COLORS.orangeSoft[1],
+    COLORS.orangeSoft[2],
   )
 
   doc.setDrawColor(
-    ...COLORS.border,
+    COLORS.border[0],
+    COLORS.border[1],
+    COLORS.border[2],
   )
 
   doc.roundedRect(
@@ -1249,7 +1291,9 @@ function drawAmountBox(
   )
 
   doc.setTextColor(
-    ...COLORS.muted,
+    COLORS.muted[0],
+    COLORS.muted[1],
+    COLORS.muted[2],
   )
 
   doc.text(
@@ -1268,7 +1312,9 @@ function drawAmountBox(
   )
 
   doc.setTextColor(
-    ...color,
+    color[0],
+    color[1],
+    color[2],
   )
 
   doc.text(
