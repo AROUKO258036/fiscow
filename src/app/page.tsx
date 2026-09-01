@@ -1,8 +1,8 @@
 import Link from 'next/link'
+import { DemoVideo } from '@/components/landing/demo-video'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { LandingNav } from '@/components/landing/nav'
-import { LandingFaq } from '@/components/landing/faq'
 import './landing.css'
 
 const CHECK_ICON = (
@@ -43,6 +43,146 @@ export default async function Home() {
     <div className="rg-body rg-landing">
       <LandingNav />
 
+      <style>{`
+        .rg-demo-box {
+          max-width: 980px;
+          margin: 0 auto;
+          border: 1px solid rgba(255, 138, 31, 0.26);
+          border-radius: 24px;
+          background: linear-gradient(145deg, #171512 0%, #24201b 100%);
+          padding: 18px;
+          box-shadow: 0 24px 70px rgba(23, 21, 18, 0.12);
+        }
+
+        .rg-demo-screen {
+          position: relative;
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          overflow: hidden;
+          border-radius: 18px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          background:
+            radial-gradient(circle at 50% 35%, rgba(255, 138, 31, 0.18), transparent 34%),
+            #11100e;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .rg-demo-placeholder {
+          text-align: center;
+          padding: 32px;
+          color: #fff;
+        }
+
+        .rg-demo-play {
+          width: 72px;
+          height: 72px;
+          margin: 0 auto 18px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #ff8a1f;
+          color: #fff;
+          font-size: 28px;
+          box-shadow: 0 10px 35px rgba(255, 138, 31, 0.28);
+        }
+
+        .rg-demo-placeholder h3 {
+          margin: 0 0 8px;
+          color: #fff;
+          font-size: clamp(20px, 3vw, 30px);
+          font-weight: 800;
+        }
+
+        .rg-demo-placeholder p {
+          max-width: 560px;
+          margin: 0 auto;
+          color: #b8b0a8;
+          font-size: 14px;
+          line-height: 1.7;
+        }
+
+        .rg-faq-list {
+          max-width: 900px;
+          margin: 0 auto;
+          display: grid;
+          gap: 12px;
+        }
+
+        .rg-faq-item {
+          border: 1px solid #e8dfd6;
+          border-radius: 14px;
+          background: #fff;
+          overflow: hidden;
+        }
+
+        .rg-faq-item summary {
+          list-style: none;
+          cursor: pointer;
+          padding: 20px 54px 20px 20px;
+          position: relative;
+          font-weight: 750;
+          color: #37312c;
+          user-select: none;
+        }
+
+        .rg-faq-item summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .rg-faq-item summary::after {
+          content: '⌄';
+          position: absolute;
+          right: 20px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #ff8a1f;
+          font-size: 24px;
+          line-height: 1;
+          transition: transform 0.2s ease;
+        }
+
+        .rg-faq-item[open] summary::after {
+          transform: translateY(-50%) rotate(180deg);
+        }
+
+        .rg-faq-answer {
+          padding: 0 20px 20px;
+          color: #6f675f;
+          font-size: 14px;
+          line-height: 1.75;
+        }
+
+        @media (max-width: 767px) {
+          .rg-demo-box {
+            padding: 10px;
+            border-radius: 18px;
+          }
+
+          .rg-demo-screen {
+            border-radius: 13px;
+          }
+
+          .rg-demo-play {
+            width: 58px;
+            height: 58px;
+            font-size: 23px;
+          }
+
+          .rg-faq-item summary {
+            padding: 17px 48px 17px 16px;
+            font-size: 14px;
+          }
+
+          .rg-faq-answer {
+            padding: 0 16px 17px;
+            font-size: 13px;
+          }
+        }
+      `}</style>
+
       <main>
         {/* HERO SECTION */}
         <section className="rg-hero" id="hero">
@@ -61,8 +201,11 @@ export default async function Home() {
                 <Link href="/register" className="rg-btn rg-btn-primary rg-btn-xl">
                   Créer mon compte gratuit
                 </Link>
-                <Link href="#solution" className="rg-btn rg-btn-outline rg-btn-xl">
-                  Voir la demo
+                <Link
+                    href="#demo"
+                    className="rg-btn rg-btn-outline rg-btn-xl"
+                  >
+                    Voir la démo
                 </Link>
               </div>
 
@@ -96,6 +239,8 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        <DemoVideo />
 
         {/* SECTION PROBLÈME (1 Image unique conservée) */}
         <section className="rg-section rg-section--subtle" id="probleme">
@@ -356,7 +501,42 @@ export default async function Home() {
               <h2 className="rg-h2">Questions fréquentes</h2>
             </div>
             <div className="rg-faq-wrapper">
-              <LandingFaq />
+              <div className="rg-faq-list">
+                <details className="rg-faq-item">
+                  <summary>Fiscow remplace-t-il un comptable ?</summary>
+                  <div className="rg-faq-answer">
+                    Fiscow automatise le suivi de vos principales obligations fiscales, les calculs et les échéances. Il vous aide à gérer votre conformité au quotidien, mais ne remplace pas un accompagnement comptable ou juridique lorsqu’une situation complexe exige l’intervention d’un professionnel.
+                  </div>
+                </details>
+
+                <details className="rg-faq-item">
+                  <summary>Quels impôts et cotisations sont pris en charge ?</summary>
+                  <div className="rg-faq-answer">
+                    Fiscow couvre actuellement les principales obligations suivies dans l’application : IS, TVA, ITS et CNSS. Les calculs et échéances proposés dépendent des informations renseignées pour votre entreprise.
+                  </div>
+                </details>
+
+                <details className="rg-faq-item">
+                  <summary>Comment Fiscow sait-il quelles échéances me concernent ?</summary>
+                  <div className="rg-faq-answer">
+                    Lors de la configuration, vous renseignez les informations essentielles de votre entreprise. Fiscow utilise ensuite ces données pour construire votre calendrier fiscal et afficher les obligations qui correspondent à votre situation.
+                  </div>
+                </details>
+
+                <details className="rg-faq-item">
+                  <summary>Mes données d’entreprise sont-elles sécurisées ?</summary>
+                  <div className="rg-faq-answer">
+                    Les informations sont utilisées uniquement pour faire fonctionner votre espace Fiscow et produire votre suivi fiscal. L’accès à votre compte reste protégé par votre authentification.
+                  </div>
+                </details>
+
+                <details className="rg-faq-item">
+                  <summary>Puis-je utiliser Fiscow sans connaissances comptables ?</summary>
+                  <div className="rg-faq-answer">
+                    Oui. L’interface a été pensée pour guider les dirigeants de PME et microentreprises sans leur demander de maîtriser les calculs fiscaux. Vous renseignez vos données et Fiscow présente les montants, échéances et actions à effectuer.
+                  </div>
+                </details>
+              </div>
             </div>
           </div>
         </section>
