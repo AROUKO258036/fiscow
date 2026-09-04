@@ -4,6 +4,8 @@ type SendEmailParams = {
   html: string
 }
 
+export const EMAIL_SEND_FAILURE = 'Impossible d’envoyer l’email pour le moment. Vérifiez la configuration Brevo puis réessayez.'
+
 const BASE_URL = process.env.AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
 function sender() {
@@ -23,7 +25,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams): Promise
       return
     }
 
-    throw new Error('BREVO_API_KEY manquant : impossible d’envoyer les emails transactionnels.')
+    throw new Error(EMAIL_SEND_FAILURE)
   }
 
   const response = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -45,7 +47,10 @@ export async function sendEmail({ to, subject, html }: SendEmailParams): Promise
   if (!response.ok) {
     const details = await response.text().catch(() => '')
     console.error('[email:brevo] échec', response.status, details)
-    throw new Error(`Brevo a refusé l’envoi de l’email (${response.status}).`)
+    if (response.status === 401) {
+      console.error('[email:brevo] 401 Unauthorized — vérifiez la valeur de BREVO_API_KEY et ses permissions')
+    }
+    throw new Error(EMAIL_SEND_FAILURE)
   }
 }
 

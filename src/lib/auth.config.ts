@@ -16,35 +16,32 @@ export const authConfig = {
   providers: [],
 
   callbacks: {
-    /*
-     * =====================================================
-     * SIGN IN
-     * =====================================================
-     */
+    // =========================================================
+    // 1. CONNEXION
+    // =========================================================
 
     async signIn({ user, account }) {
-      /*
-       * Pour Google :
-       * on s'assure que l'utilisateur existe dans Prisma.
-       */
+      // ---------------------------------------------------------
+      // GOOGLE
+      // ---------------------------------------------------------
+
       if (account?.provider === "google") {
         if (!user.email) {
           return false
         }
 
-        const existing =
-          await prisma.user.findUnique({
-            where: {
-              email: user.email,
-            },
-          })
+        const existingUser = await prisma.user.findUnique({
+          where: {
+            email: user.email,
+          },
+        })
 
-        if (!existing) {
-          const hashed =
-            await bcrypt.hash(
-              crypto.randomUUID(),
-              10
-            )
+        // Nouvel utilisateur Google
+        if (!existingUser) {
+          const hashedPassword = await bcrypt.hash(
+            crypto.randomUUID(),
+            10,
+          )
 
           await prisma.user.create({
             data: {
@@ -54,35 +51,55 @@ export const authConfig = {
 
               email: user.email,
 
-              password: hashed,
+              password: hashedPassword,
 
-              emailVerifiedAt:
-                new Date(),
+              // Google a déjà vérifié cette adresse.
+              emailVerifiedAt: new Date(),
 
               role: "USER",
             },
           })
+
+          return true
         }
+
+        // -------------------------------------------------------
+        // Utilisateur déjà existant
+        // -------------------------------------------------------
+        // Si l'utilisateur se connecte avec Google,
+        // nous pouvons considérer son adresse comme vérifiée.
+        // Cela évite de le renvoyer vers /verify-email.
+
+        if (!existingUser.emailVerifiedAt) {
+          await prisma.user.update({
+            where: {
+              id: existingUser.id,
+            },
+
+            data: {
+              emailVerifiedAt: new Date(),
+            },
+          })
+        }
+
+        return true
       }
+
+      // ---------------------------------------------------------
+      // AUTRES MÉTHODES DE CONNEXION
+      // ---------------------------------------------------------
 
       return true
     },
 
-    /*
-     * =====================================================
-     * JWT
-     * =====================================================
-     *
-     * C'est la correction importante.
-     *
-     * On ne se fie plus uniquement à user.id.
-     * On récupère l'utilisateur réel dans Prisma grâce
-     * à son email.
-     */
+    // =========================================================
+    // 2. JWT
+    // =========================================================
 
     async jwt({ token, user }) {
       const email =
-        user?.email ?? token.email
+        user?.email ??
+        token.email
 
       if (email) {
         const dbUser =
@@ -100,16 +117,6 @@ export const authConfig = {
           })
 
         if (dbUser) {
-          /*
-           * ID PRISMA
-           *
-           * Ex :
-           * 1
-           * 2
-           * 15
-           *
-           * et non un ID Google.
-           */
           token.id =
             String(dbUser.id)
 
@@ -127,11 +134,9 @@ export const authConfig = {
       return token
     },
 
-    /*
-     * =====================================================
-     * SESSION
-     * =====================================================
-     */
+    // =========================================================
+    // 3. SESSION
+    // =========================================================
 
     async session({
       session,
