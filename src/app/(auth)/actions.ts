@@ -8,7 +8,7 @@ import { prisma } from '@/lib/prisma'
 import { signIn, signOut } from '@/lib/auth'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 import { generateToken, tokenExpiry, VERIFY_TOKEN_TTL_MS, RESET_TOKEN_TTL_MS } from '@/lib/auth-tokens'
-import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/email'
+import { sendPasswordResetEmail, sendVerificationEmail, EMAIL_SEND_FAILURE } from '@/lib/email'
 
 export type AuthState = { error?: string; success?: string; values?: Record<string, string> } | null
 
@@ -163,7 +163,7 @@ export async function resendVerificationAction(): Promise<AuthState> {
     await sendVerificationEmail(user.email, token)
   } catch (error) {
     console.error('[auth:verify] email de vérification non envoyé', error)
-    return { error: 'Impossible d’envoyer l’email pour le moment. Vérifiez la configuration Brevo puis réessayez.' }
+    return { error: EMAIL_SEND_FAILURE }
   }
 
   return { success: 'Un nouveau lien de vérification a été envoyé.' }
